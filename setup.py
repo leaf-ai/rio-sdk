@@ -41,6 +41,6 @@ setup(
     ],
     description='This is the SDK for accessing RIO as a service.',
     long_description=_read('README.md'),
-    author='Xin Qiu',
+    author='Darren Sargent',
     url='https://github.com/leaf-ai/rio-sdk/'
 )
