@@ -29,7 +29,7 @@ setup(
     name='rio-sdk',
     version='1.0.0',
     python_requires='>={}.{}'.format(*REQUIRED_PYTHON),
-    packages=['rio_sdk', 'rio)sdk.generated'],
+    packages=['rio_sdk', 'rio_sdk.generated'],
     package_data={
         'rio_sdk.proto': ['rio.proto']
     },
