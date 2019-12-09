@@ -26,7 +26,7 @@ def _read(fname):
 
 
 setup(
-    name='rio',
+    name='rio-sdk',
     version='1.0.0',
     python_requires='>={}.{}'.format(*REQUIRED_PYTHON),
     packages=['generated'],
