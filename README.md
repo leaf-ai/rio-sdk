@@ -1,2 +1,2 @@
-# rio-sdk
-Files and documentation for accessing the RIO service
+# RIO SDK
+This library contains modules for accessing RIO services.

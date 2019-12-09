@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+package rio;
+
+/*
+  This is the interface for the "RIO" service, which provides functionality for estimating the uncertainty in the
+  predictor's predictions, as well as providing corrected predictions.
+
+  The predictor could be a neural network or other models capable of generating predictions based on inputs.
+
+  For more information see the white paper: https://arxiv.org/abs/1906.00588
+
+  All data passed to RIO-service requests ("normed_train_data", "train_labels", "train_predictions",  normed_test_data,
+  and "test_predictions") should be in CSV format.
+*/
+service RioService {
+    // Given training data and original NN prediction, this method returns the hyperparameters of
+    // the trained model, the model itself, and the training time in seconds.
+    rpc Train (TrainRequest) returns (TrainResult) { }
+    // Given the trained GPFlow model, testing data and original NN predictions, this method returns the predicted
+    // mean and variance, as well as the inference time in seconds.
+    rpc Predict (PredictRequest) returns (PredictResult) { }
+}
+
+// Gaussian process type
+enum FrameworkVariant {
+    // Predicting residuals with I/O kernel
+    GP_CORRECTED = 0;
+
+    // Predicting residuals with input kernel only
+    GP_CORRECTED_INPUT_ONLY = 1;
+
+    // Predicting residuals with output kernel only
+    GP_CORRECTED_OUTPUT_ONLY = 2;
+
+    // Predicting labels directly with I/O kernel
+    GP = 3;
+
+    // Predicting labels directly with input kernel only
+    GP_INPUT_ONLY = 4;
+
+    // Predicting labels directly with output kernel only
+    GP_OUTPUT_ONLY = 5;
+}
+
+// Which kind of GPFlow kernel to use. For more information on gpflow see https://github.com/GPflow/GPflow
+// Terminology:
+//  RBF = "radial basis function"
+enum KernelType {
+    // Input kernel only
+    RBF = 0;
+
+    // Output kernel only
+    RBFY = 1;
+
+    // I/O kernel
+    RBF_PLUS_RBF = 2;
+}
+
+message TrainRequest {
+    // // Kernel type to be used to train this SVGP model
+    FrameworkVariant framework_variant = 1;
+
+    // Kernel type to be used to train this SVGP model
+    KernelType kernel_type = 2;
+
+    // Training data (input only) on which the original predictor is trained
+    string normed_train_data = 3;
+
+    // Training labels on which the original predictor is trained
+    string train_labels = 4;
+
+    // Predictions from the predictor (e.g. neural network) based on the training data
+    string train_predictions = 5;
+
+    // Number of inducing points for SVGP (Stochastic Variational Gaussian Processes (SVGPs))
+    int32 num_svgp_inducing_points = 6;
+
+    // Number of maximum iterations for optimizer
+    int32 max_iterations_optimizer = 7;
+}
+
+message PredictRequest {
+    // Test data (input only)
+    string normed_test_data = 1;
+
+    // Predictions from the predictor (e.g. neural network) based on the test data
+    string test_predictions = 2;
+
+    // SVGP model as bytes stream
+    bytes model = 3;
+
+    // Kernel type to be used for inference on this SVGP model
+    FrameworkVariant framework_variant = 4;
+
+    // Kernel type to be used to train this SVGP model
+    KernelType kernel_type = 5;
+}
+
+message TrainResult {
+    // Hyperparameters for the gpflow kernel. See gpflow documentation for more info:
+    // https://gpflow.readthedocs.io/en/latest/notebooks/kernels.html
+    repeated double hyperparameters = 1;
+
+    // Elapsed wall-clock time, taken to perform the calculation in seconds
+    float computation_time_seconds = 2;
+
+    // Serialized SVGP model
+    bytes model = 3;
+}
+
+message PredictResult {
+    // Mean of the corrected predictions for the test data
+    string mean = 1;
+
+    // Variance of the corrected predictions for the test data
+    string var = 2;
+
+    // Elapsed wall-clock time, taken to perform the calculation in seconds
+    float computation_time_seconds = 3;
+}
