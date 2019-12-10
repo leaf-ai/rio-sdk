@@ -29,9 +29,9 @@ setup(
     name='rio-sdk',
     version='1.0.0',
     python_requires='>={}.{}'.format(*REQUIRED_PYTHON),
-    packages=['rio_sdk', 'rio_sdk.generated'],
+    packages=['rio_sdk', 'rio_sdk.generated', 'rio_sdk.protos'],
     package_data={
-        'rio_sdk.proto': ['rio.proto']
+        'rio_sdk.protos': ['rio.proto']
     },
     install_requires=[
         "gpflow==1.3.0",
