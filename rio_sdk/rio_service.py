@@ -14,28 +14,41 @@ class RioService:
         """
         Instantiates a class that can interact with the RIO service
         """
-        print(f"Opening gRPC connection to {rio_host}:{rio_port}")
-        channel = grpc.insecure_channel('{}:{}'.format(rio_host, rio_port))
+        target = f"{rio_host}:{rio_port}"
+        print(f"Opening gRPC connection to {target}")
+        channel = grpc.insecure_channel(target)
         self.rio_service = RioServiceStub(channel)
 
-    def train(self, original_model, encoded_train_x_df, train_y_df):
+    def train(self,
+              original_model,
+              encoded_train_x_df,
+              train_y_df,
+              framework_variant=FrameworkVariant.GP_CORRECTED,
+              kernel_type=KernelType.RBF_PLUS_RBF,
+              num_svgp_inducing_points=50,
+              max_iterations_optimizer=1000):
         """
         Trains a RIO model to estimate the uncertainty of the passed model and reduce the prediction errors.
-        :param  original_model: the model to evaluate with RIO
+        Based on Stochastic Variational Gaussian Processes (SVGP).
+        :param  original_model: the model to evaluate with RIO.
         :param encoded_train_x_df: the features used to train the original model
         :param train_y_df: the labels used to train the original model
+        :param framework_variant: Gaussian process type to use to train the SVGP model
+        :param kernel_type: kernel type to use to train the SVGP model
+        :param num_svgp_inducing_points: number of inducing points for the SVGP model
+        :param max_iterations_optimizer: number of maximum iterations for optimizer
         :return: the bytes of a RIO model that can be used to enhance predictions
         """
         outcome_train_predictions = original_model.predict(encoded_train_x_df)
         outcome_train_predictions_csv = ','.join((map(str, list(outcome_train_predictions))))
         outcome_train_request = TrainRequest(
-            framework_variant=FrameworkVariant.Value("GP_CORRECTED"),
-            kernel_type=KernelType.Value("RBF_PLUS_RBF"),
+            framework_variant=framework_variant,
+            kernel_type=kernel_type,
             normed_train_data=encoded_train_x_df.to_csv(index=False),
             train_labels=train_y_df.to_csv(header=False, index=False),
             train_predictions=outcome_train_predictions_csv,
-            num_svgp_inducing_points=50,
-            max_iterations_optimizer=1000)
+            num_svgp_inducing_points=num_svgp_inducing_points,
+            max_iterations_optimizer=max_iterations_optimizer)
         train_response = self.rio_service.Train(outcome_train_request)
         return train_response.model
 
@@ -66,8 +79,8 @@ class RioService:
         :param filepath: the name of the file to save to, e.g. 'models/rio_model.bytes'
         :return: nothing
         """
-        with open(filepath, 'wb') as f:
-            f.write(rio_model)
+        with open(filepath, 'wb') as rio_model_file:
+            rio_model_file.write(rio_model)
 
     @staticmethod
     def load(filepath):
@@ -76,6 +89,6 @@ class RioService:
         :param filepath: the name of the file that contains a RIO model
         :return: the bytes of a RIO model
         """
-        with open(filepath, 'rb') as f:
-            rio_model = f.read()
+        with open(filepath, 'rb') as rio_model_file:
+            rio_model = rio_model_file.read()
         return rio_model
