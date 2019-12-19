@@ -30,7 +30,7 @@ class RioService:
         """
         Trains a RIO model to estimate the uncertainty of the passed model and reduce the prediction errors.
         Based on Stochastic Variational Gaussian Processes (SVGP).
-        :param  original_model: the model to evaluate with RIO.
+        :param original_model: the model to evaluate with RIO.
         :param encoded_train_x_df: the features used to train the original model
         :param train_y_df: the labels used to train the original model
         :param framework_variant: Gaussian process type to use to train the SVGP model
@@ -39,17 +39,17 @@ class RioService:
         :param max_iterations_optimizer: number of maximum iterations for optimizer
         :return: the bytes of a RIO model that can be used to enhance predictions
         """
-        outcome_train_predictions = original_model.predict(encoded_train_x_df)
-        outcome_train_predictions_csv = ','.join((map(str, list(outcome_train_predictions))))
-        outcome_train_request = TrainRequest(
+        train_predictions = original_model.predict(encoded_train_x_df)
+        train_predictions_csv = ','.join((map(str, list(train_predictions))))
+        train_request = TrainRequest(
             framework_variant=framework_variant,
             kernel_type=kernel_type,
             normed_train_data=encoded_train_x_df.to_csv(index=False),
             train_labels=train_y_df.to_csv(header=False, index=False),
-            train_predictions=outcome_train_predictions_csv,
+            train_predictions=train_predictions_csv,
             num_svgp_inducing_points=num_svgp_inducing_points,
             max_iterations_optimizer=max_iterations_optimizer)
-        train_response = self.rio_service.Train(outcome_train_request)
+        train_response = self.rio_service.Train(train_request)
         return train_response.model
 
     def predict(self, original_model, rio_model, encoded_x_df):
@@ -60,13 +60,13 @@ class RioService:
         :param encoded_x_df: the DataFrame containing the features for which to make predictions
         :return: means and variances of the RIO corrected predictions, as numpy arrays
         """
-        outcome_test_predictions = original_model.predict(encoded_x_df)
-        outcome_test_predictions_csv = ','.join((map(str, list(outcome_test_predictions))))
-        outcome_predict_request = PredictRequest(
+        test_predictions = original_model.predict(encoded_x_df)
+        test_predictions_csv = ','.join((map(str, list(test_predictions))))
+        predict_request = PredictRequest(
             model=rio_model,
             normed_test_data=encoded_x_df.to_csv(index=False),
-            test_predictions=outcome_test_predictions_csv)
-        predict_response = self.rio_service.Predict(outcome_predict_request)
+            test_predictions=test_predictions_csv)
+        predict_response = self.rio_service.Predict(predict_request)
         means = np.fromstring(predict_response.mean, dtype=float, sep=',')
         variances = np.fromstring(predict_response.var, dtype=float, sep=',')
         return means, variances
