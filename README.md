@@ -1,3 +1,5 @@
+Copyright (C) 2019 Cognizant Digital Business, Cognizant Artifical Intelligence Practice.  All rights reserved.
+
 # RIO SDK
 
 ## Overview
