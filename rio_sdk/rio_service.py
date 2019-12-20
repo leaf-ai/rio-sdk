@@ -20,31 +20,31 @@ class RioService:
         self.rio_service = RioServiceStub(channel)
 
     def train(self,
-              original_model,
-              encoded_train_x_df,
+              train_predictions_df,
+              train_x_df,
               train_y_df,
               framework_variant=FrameworkVariant.GP_CORRECTED,
               kernel_type=KernelType.RBF_PLUS_RBF,
               num_svgp_inducing_points=50,
               max_iterations_optimizer=1000):
         """
-        Trains a RIO model to estimate the uncertainty of the passed model and reduce the prediction errors.
+        Trains a RIO model to estimate the uncertainty of a trained model and reduce its prediction errors.
         Based on Stochastic Variational Gaussian Processes (SVGP).
-        :param original_model: the model to evaluate with RIO.
-        :param encoded_train_x_df: the features used to train the original model
-        :param train_y_df: the labels used to train the original model
+        :param train_predictions_df: a Pandas DataFrame containing the predictions made by the trained model
+        on the training data
+        :param train_x_df: a Pandas DataFrame containing the the features used to train the model
+        :param train_y_df: a Pandas DataFrame containing the labels used to train the model
         :param framework_variant: Gaussian process type to use to train the SVGP model
         :param kernel_type: kernel type to use to train the SVGP model
         :param num_svgp_inducing_points: number of inducing points for the SVGP model
         :param max_iterations_optimizer: number of maximum iterations for optimizer
         :return: the bytes of a RIO model that can be used to enhance predictions
         """
-        train_predictions = original_model.predict(encoded_train_x_df)
-        train_predictions_csv = ','.join((map(str, list(train_predictions))))
+        train_predictions_csv = train_predictions_df.to_csv(header=False, index=False, line_terminator=",")
         train_request = TrainRequest(
             framework_variant=framework_variant,
             kernel_type=kernel_type,
-            normed_train_data=encoded_train_x_df.to_csv(index=False),
+            normed_train_data=train_x_df.to_csv(index=False),
             train_labels=train_y_df.to_csv(header=False, index=False),
             train_predictions=train_predictions_csv,
             num_svgp_inducing_points=num_svgp_inducing_points,
@@ -52,20 +52,19 @@ class RioService:
         train_response = self.rio_service.Train(train_request)
         return train_response.model
 
-    def predict(self, original_model, rio_model, encoded_x_df):
+    def predict(self, x_df, predictions_df, rio_model):
         """
-        Enhances the original model's predictions using the corresponding trained RIO model.
-        :param original_model: the model to use to make predictions
-        :param rio_model: the trained RIO model to use to reduce the predictions error
-        :param encoded_x_df: the DataFrame containing the features for which to make predictions
+        Enhances the model's predictions on the passed features using the corresponding trained RIO model.
+        :param x_df: a Pandas DataFrame containing the features for which we want RIO's enhanced predictions
+        :param predictions_df: a Pandas DataFrame containing the initial predictions on the passed x_df features
+        :param rio_model: a previously trained RIO model to use to reduce the predictions error
         :return: means and variances of the RIO corrected predictions, as numpy arrays
         """
-        test_predictions = original_model.predict(encoded_x_df)
-        test_predictions_csv = ','.join((map(str, list(test_predictions))))
+        predictions_csv = predictions_df.to_csv(header=False, index=False, line_terminator=",")
         predict_request = PredictRequest(
             model=rio_model,
-            normed_test_data=encoded_x_df.to_csv(index=False),
-            test_predictions=test_predictions_csv)
+            normed_test_data=x_df.to_csv(index=False),
+            test_predictions=predictions_csv)
         predict_response = self.rio_service.Predict(predict_request)
         means = np.fromstring(predict_response.mean, dtype=float, sep=',')
         variances = np.fromstring(predict_response.var, dtype=float, sep=',')
