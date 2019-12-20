@@ -41,11 +41,13 @@ class RioService:
         :return: the bytes of a RIO model that can be used to enhance predictions
         """
         train_predictions_csv = train_predictions_df.to_csv(header=False, index=False, line_terminator=",")
+        train_x_csv = train_x_df.to_csv(index=False)
+        train_y_csv = train_y_df.to_csv(header=False, index=False)
         train_request = TrainRequest(
             framework_variant=framework_variant,
             kernel_type=kernel_type,
-            normed_train_data=train_x_df.to_csv(index=False),
-            train_labels=train_y_df.to_csv(header=False, index=False),
+            normed_train_data=train_x_csv,
+            train_labels=train_y_csv,
             train_predictions=train_predictions_csv,
             num_svgp_inducing_points=num_svgp_inducing_points,
             max_iterations_optimizer=max_iterations_optimizer)
