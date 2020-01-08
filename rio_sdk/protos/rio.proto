@@ -29,7 +29,7 @@ service RioService {
 
 // Gaussian process type
 enum FrameworkVariant {
-    // Predicting residuals with I/O kernel
+    // Predicting residuals with I/O kernel, corresponding to original RIO
     GP_CORRECTED = 0;
 
     // Predicting residuals with input kernel only
@@ -63,10 +63,10 @@ enum KernelType {
 }
 
 message TrainRequest {
-    // // Kernel type to be used to train this SVGP model
+    // Framework variant to be used, choose "GP_CORRECTED" to run original RIO
     FrameworkVariant framework_variant = 1;
 
-    // Kernel type to be used to train this SVGP model
+    // Kernel type to be used to train this SVGP model, choose "RBF_PLUS_RBF" to use I/O kernel
     KernelType kernel_type = 2;
 
     // Training data (input only) on which the original predictor is trained
@@ -78,11 +78,13 @@ message TrainRequest {
     // Predictions from the predictor (e.g. neural network) based on the training data
     string train_predictions = 5;
 
-    // Number of inducing points for SVGP (Stochastic Variational Gaussian Processes (SVGPs))
+    // Number of inducing points for SVGP, default value is 50 
     int32 num_svgp_inducing_points = 6;
 
-    // Number of maximum iterations for optimizer
+    // Number of maximum iterations for LBFGS-B optimizer, default value is 1000
     int32 max_iterations_optimizer = 7;
+    // Option to turn on/off Automatic Relevance Determination (ARD), default is ON
+    bool use_ard = 8;
 }
 
 message PredictRequest {
@@ -103,15 +105,12 @@ message PredictRequest {
 }
 
 message TrainResult {
-    // Hyperparameters for the gpflow kernel. See gpflow documentation for more info:
-    // https://gpflow.readthedocs.io/en/latest/notebooks/kernels.html
-    repeated double hyperparameters = 1;
 
     // Elapsed wall-clock time, taken to perform the calculation in seconds
-    float computation_time_seconds = 2;
+    float computation_time_seconds = 1;
 
     // Serialized SVGP model
-    bytes model = 3;
+    bytes model = 2;
 }
 
 message PredictResult {

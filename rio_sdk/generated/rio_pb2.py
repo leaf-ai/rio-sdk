@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='rio',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\trio.proto\x12\x03rio\"\xf6\x01\n\x0cTrainRequest\x12\x30\n\x11\x66ramework_variant\x18\x01 \x01(\x0e\x32\x15.rio.FrameworkVariant\x12$\n\x0bkernel_type\x18\x02 \x01(\x0e\x32\x0f.rio.KernelType\x12\x19\n\x11normed_train_data\x18\x03 \x01(\t\x12\x14\n\x0ctrain_labels\x18\x04 \x01(\t\x12\x19\n\x11train_predictions\x18\x05 \x01(\t\x12 \n\x18num_svgp_inducing_points\x18\x06 \x01(\x05\x12 \n\x18max_iterations_optimizer\x18\x07 \x01(\x05\"\xab\x01\n\x0ePredictRequest\x12\x18\n\x10normed_test_data\x18\x01 \x01(\t\x12\x18\n\x10test_predictions\x18\x02 \x01(\t\x12\r\n\x05model\x18\x03 \x01(\x0c\x12\x30\n\x11\x66ramework_variant\x18\x04 \x01(\x0e\x32\x15.rio.FrameworkVariant\x12$\n\x0bkernel_type\x18\x05 \x01(\x0e\x32\x0f.rio.KernelType\"W\n\x0bTrainResult\x12\x17\n\x0fhyperparameters\x18\x01 \x03(\x01\x12 \n\x18\x63omputation_time_seconds\x18\x02 \x01(\x02\x12\r\n\x05model\x18\x03 \x01(\x0c\"L\n\rPredictResult\x12\x0c\n\x04mean\x18\x01 \x01(\t\x12\x0b\n\x03var\x18\x02 \x01(\t\x12 \n\x18\x63omputation_time_seconds\x18\x03 \x01(\x02*\x8e\x01\n\x10\x46rameworkVariant\x12\x10\n\x0cGP_CORRECTED\x10\x00\x12\x1b\n\x17GP_CORRECTED_INPUT_ONLY\x10\x01\x12\x1c\n\x18GP_CORRECTED_OUTPUT_ONLY\x10\x02\x12\x06\n\x02GP\x10\x03\x12\x11\n\rGP_INPUT_ONLY\x10\x04\x12\x12\n\x0eGP_OUTPUT_ONLY\x10\x05*1\n\nKernelType\x12\x07\n\x03RBF\x10\x00\x12\x08\n\x04RBFY\x10\x01\x12\x10\n\x0cRBF_PLUS_RBF\x10\x02\x32r\n\nRioService\x12.\n\x05Train\x12\x11.rio.TrainRequest\x1a\x10.rio.TrainResult\"\x00\x12\x34\n\x07Predict\x12\x13.rio.PredictRequest\x1a\x12.rio.PredictResult\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\trio.proto\x12\x03rio\"\x87\x02\n\x0cTrainRequest\x12\x30\n\x11\x66ramework_variant\x18\x01 \x01(\x0e\x32\x15.rio.FrameworkVariant\x12$\n\x0bkernel_type\x18\x02 \x01(\x0e\x32\x0f.rio.KernelType\x12\x19\n\x11normed_train_data\x18\x03 \x01(\t\x12\x14\n\x0ctrain_labels\x18\x04 \x01(\t\x12\x19\n\x11train_predictions\x18\x05 \x01(\t\x12 \n\x18num_svgp_inducing_points\x18\x06 \x01(\x05\x12 \n\x18max_iterations_optimizer\x18\x07 \x01(\x05\x12\x0f\n\x07use_ard\x18\x08 \x01(\x08\"\xab\x01\n\x0ePredictRequest\x12\x18\n\x10normed_test_data\x18\x01 \x01(\t\x12\x18\n\x10test_predictions\x18\x02 \x01(\t\x12\r\n\x05model\x18\x03 \x01(\x0c\x12\x30\n\x11\x66ramework_variant\x18\x04 \x01(\x0e\x32\x15.rio.FrameworkVariant\x12$\n\x0bkernel_type\x18\x05 \x01(\x0e\x32\x0f.rio.KernelType\">\n\x0bTrainResult\x12 \n\x18\x63omputation_time_seconds\x18\x01 \x01(\x02\x12\r\n\x05model\x18\x02 \x01(\x0c\"L\n\rPredictResult\x12\x0c\n\x04mean\x18\x01 \x01(\t\x12\x0b\n\x03var\x18\x02 \x01(\t\x12 \n\x18\x63omputation_time_seconds\x18\x03 \x01(\x02*\x8e\x01\n\x10\x46rameworkVariant\x12\x10\n\x0cGP_CORRECTED\x10\x00\x12\x1b\n\x17GP_CORRECTED_INPUT_ONLY\x10\x01\x12\x1c\n\x18GP_CORRECTED_OUTPUT_ONLY\x10\x02\x12\x06\n\x02GP\x10\x03\x12\x11\n\rGP_INPUT_ONLY\x10\x04\x12\x12\n\x0eGP_OUTPUT_ONLY\x10\x05*1\n\nKernelType\x12\x07\n\x03RBF\x10\x00\x12\x08\n\x04RBFY\x10\x01\x12\x10\n\x0cRBF_PLUS_RBF\x10\x02\x32r\n\nRioService\x12.\n\x05Train\x12\x11.rio.TrainRequest\x1a\x10.rio.TrainResult\"\x00\x12\x34\n\x07Predict\x12\x13.rio.PredictRequest\x1a\x12.rio.PredictResult\"\x00\x62\x06proto3')
 )
 
 _FRAMEWORKVARIANT = _descriptor.EnumDescriptor(
@@ -56,8 +56,8 @@ _FRAMEWORKVARIANT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=609,
-  serialized_end=751,
+  serialized_start=601,
+  serialized_end=743,
 )
 _sym_db.RegisterEnumDescriptor(_FRAMEWORKVARIANT)
 
@@ -83,8 +83,8 @@ _KERNELTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=753,
-  serialized_end=802,
+  serialized_start=745,
+  serialized_end=794,
 )
 _sym_db.RegisterEnumDescriptor(_KERNELTYPE)
 
@@ -157,6 +157,13 @@ _TRAINREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='use_ard', full_name='rio.TrainRequest.use_ard', index=7,
+      number=8, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -170,7 +177,7 @@ _TRAINREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=19,
-  serialized_end=265,
+  serialized_end=282,
 )
 
 
@@ -228,8 +235,8 @@ _PREDICTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=268,
-  serialized_end=439,
+  serialized_start=285,
+  serialized_end=456,
 )
 
 
@@ -241,22 +248,15 @@ _TRAINRESULT = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='hyperparameters', full_name='rio.TrainResult.hyperparameters', index=0,
-      number=1, type=1, cpp_type=5, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='computation_time_seconds', full_name='rio.TrainResult.computation_time_seconds', index=1,
-      number=2, type=2, cpp_type=6, label=1,
+      name='computation_time_seconds', full_name='rio.TrainResult.computation_time_seconds', index=0,
+      number=1, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='model', full_name='rio.TrainResult.model', index=2,
-      number=3, type=12, cpp_type=9, label=1,
+      name='model', full_name='rio.TrainResult.model', index=1,
+      number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -273,8 +273,8 @@ _TRAINRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=441,
-  serialized_end=528,
+  serialized_start=458,
+  serialized_end=520,
 )
 
 
@@ -318,8 +318,8 @@ _PREDICTRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=530,
-  serialized_end=606,
+  serialized_start=522,
+  serialized_end=598,
 )
 
 _TRAINREQUEST.fields_by_name['framework_variant'].enum_type = _FRAMEWORKVARIANT
@@ -370,8 +370,8 @@ _RIOSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=804,
-  serialized_end=918,
+  serialized_start=796,
+  serialized_end=910,
   methods=[
   _descriptor.MethodDescriptor(
     name='Train',
