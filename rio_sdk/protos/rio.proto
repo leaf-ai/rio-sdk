@@ -83,7 +83,8 @@ message TrainRequest {
 
     // Number of maximum iterations for LBFGS-B optimizer, default value is 1000
     int32 max_iterations_optimizer = 7;
-    // Option to turn on/off Automatic Relevance Determination (ARD), default is ON
+
+    // Option to turn on/off Automatic Relevance Determination (ARD), default is ON in RIO-SDK
     bool use_ard = 8;
 }
 
@@ -94,13 +95,13 @@ message PredictRequest {
     // Predictions from the predictor (e.g. neural network) based on the test data
     string test_predictions = 2;
 
-    // SVGP model as bytes stream
+    // Trained RIO model (as bytes stream) to be used for predictions
     bytes model = 3;
 
-    // Kernel type to be used for inference on this SVGP model
+    // Framework variant of the trained RIO model
     FrameworkVariant framework_variant = 4;
 
-    // Kernel type to be used to train this SVGP model
+    // Kernel type of the trained RIO model
     KernelType kernel_type = 5;
 }
 
