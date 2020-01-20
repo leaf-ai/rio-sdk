@@ -30,7 +30,8 @@ class RioService:
               framework_variant=FrameworkVariant.GP_CORRECTED,
               kernel_type=KernelType.RBF_PLUS_RBF,
               num_svgp_inducing_points=50,
-              max_iterations_optimizer=1000):
+              max_iterations_optimizer=1000,
+              use_ard=True):
         """
         Trains a RIO model to estimate the uncertainty of a trained model and reduce its prediction errors.
         Based on Stochastic Variational Gaussian Processes (SVGP).
@@ -42,6 +43,7 @@ class RioService:
         :param kernel_type: kernel type to use to train the SVGP model
         :param num_svgp_inducing_points: number of inducing points for the SVGP model
         :param max_iterations_optimizer: number of maximum iterations for optimizer
+        :param use_ard: boolean to turn on/off Automatic Relevance Determination (ARD)
         :return: the bytes of a RIO model that can be used to enhance predictions
         """
         train_predictions_csv = train_predictions_df.to_csv(header=False, index=False, line_terminator=",")
@@ -54,7 +56,8 @@ class RioService:
             train_labels=train_y_csv,
             train_predictions=train_predictions_csv,
             num_svgp_inducing_points=num_svgp_inducing_points,
-            max_iterations_optimizer=max_iterations_optimizer)
+            max_iterations_optimizer=max_iterations_optimizer,
+            use_ard=use_ard)
         train_response = self.rio_service.Train(train_request)
         return train_response.model
 
