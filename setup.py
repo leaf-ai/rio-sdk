@@ -1,5 +1,5 @@
 """
-Copyright (C) 2019 Cognizant Digital Business, Cognizant Artifical Intelligence Practice.
+Copyright (C) 2019 Cognizant Digital Business, Cognizant Artificial Intelligence Practice.
 All rights reserved.
 
 Installer for the RIO SDK
