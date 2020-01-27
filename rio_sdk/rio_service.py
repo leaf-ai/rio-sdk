@@ -8,6 +8,12 @@ import numpy as np
 from rio_sdk.generated.rio_pb2 import TrainRequest, PredictRequest, FrameworkVariant, KernelType
 from rio_sdk.generated.rio_pb2_grpc import RioServiceStub
 
+MAX_MESSAGE_LENGTH_BYTES = 100 * 1024 * 1024  # 100 MB
+
+GRPC_OPTIONS = [
+    ('grpc.max_send_message_length', MAX_MESSAGE_LENGTH_BYTES),
+    ('grpc.max_receive_message_length', MAX_MESSAGE_LENGTH_BYTES)
+]
 
 class RioService:
     """
@@ -20,7 +26,7 @@ class RioService:
         """
         target = f"{rio_host}:{rio_port}"
         print(f"Opening gRPC connection to {target}")
-        channel = grpc.insecure_channel(target)
+        channel = grpc.insecure_channel(target, options=GRPC_OPTIONS)
         self.rio_service = RioServiceStub(channel)
 
     def train(self,
