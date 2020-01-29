@@ -8,7 +8,7 @@ import numpy as np
 from rio_sdk.generated.rio_pb2 import TrainRequest, PredictRequest, FrameworkVariant, KernelType
 from rio_sdk.generated.rio_pb2_grpc import RioServiceStub
 
-MAX_MESSAGE_LENGTH_BYTES = 100 * 1024 * 1024  # 100 MB
+MAX_MESSAGE_LENGTH_BYTES = -1  # unlimited
 
 GRPC_OPTIONS = [
     ('grpc.max_send_message_length', MAX_MESSAGE_LENGTH_BYTES),
