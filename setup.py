@@ -30,17 +30,17 @@ def _read(fname):
 
 setup(
     name='rio-sdk',
-    version='2.0.2',
+    version='2.0.3',
     python_requires='>={}.{}'.format(*REQUIRED_PYTHON),
     packages=['rio_sdk', 'rio_sdk.generated', 'rio_sdk.protos'],
     package_data={
         'rio_sdk.protos': ['rio.proto']
     },
     install_requires=[
-        "gpflow==1.3.0",
-        "grpcio-tools==1.16.0",
-        "grpcio==1.16.0",
-        "protobuf==3.9.1",
+        "gpflow==1.5.1",
+        "grpcio-tools==1.29.0",
+        "grpcio==1.29.0",
+        "protobuf==3.12.4",
     ],
     description='This is the SDK for accessing RIO as a service.',
     long_description=_read('README.md'),
